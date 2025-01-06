@@ -33,5 +33,4 @@ Route::get('/article.html', function () {
 Route::get('/recherche', [SearchController::class, 'index'])->name('recherche');
 
 // Route pour effectuer la recherche
-Route::post('/search', [SearchController::class, 'search'])->name('search');
-
+Route::get('/search', [SearchController::class, 'search'])->name('search');

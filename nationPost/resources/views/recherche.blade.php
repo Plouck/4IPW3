@@ -39,14 +39,14 @@
               </select>
             </div>
 
-            <!-- Liste déroulante des plages de dates -->
+            <!-- Liste déroulante des dates disponibles -->
             <div class="form-group mb-3">
-              <label for="inputSelect2">Date de parution</label>
-              <select id="inputSelect2" name="date_range" class="form-control">
-                <option value="" selected>Toutes les dates</option>
-                <option value="before_2020">Avant 2020</option>
-                <option value="2020_2023">Entre 2020 et 2023</option>
-                <option value="after_2023">Après 2023</option>
+              <label for="dateSelect">Liste des dates de parution</label>
+              <select id="dateSelect" name="specific_date" class="form-control">
+                <option value="" selected>Choisissez une date</option>
+                @foreach($dates as $date)
+                  <option value="{{ $date }}">{{ $date }}</option>
+                @endforeach
               </select>
             </div>
 

@@ -9,16 +9,19 @@ use App\Models\Category;
 class SearchController extends Controller
 {
     /**
-     * Affiche la page de recherche avec les catégories disponibles.
+     * Affiche la page de recherche avec les catégories et les dates disponibles.
      *
      * @return \Illuminate\View\View
      */
     public function index()
     {
-        // Récupérer toutes les catégories pour les options du formulaire
+        // Récupérer toutes les catégories
         $categories = Category::all();
 
-        return view('recherche', compact('categories'));
+        // Récupérer toutes les dates distinctes des articles
+        $dates = Article::select('date_art')->distinct()->orderBy('date_art', 'desc')->pluck('date_art');
+
+        return view('recherche', compact('categories', 'dates'));
     }
 
     /**
@@ -34,10 +37,11 @@ class SearchController extends Controller
             'title' => 'nullable|string|max:255',
             'category' => 'nullable|integer|exists:categories,id_cat',
             'date_range' => 'nullable|string|in:before_2020,2020_2023,after_2023',
+            'specific_date' => 'nullable|date',
             'keyword' => 'nullable|string|max:255',
         ]);
 
-        // Construire la requête de base
+        // Construire la requête
         $query = Article::query();
 
         // Filtrer par titre
@@ -50,20 +54,9 @@ class SearchController extends Controller
             $query->where('fk_category_art', $validated['category']);
         }
 
-        // Filtrer par plage de dates
-        if (!empty($validated['date_range'])) {
-            switch ($validated['date_range']) {
-                case 'before_2020':
-                    $query->whereYear('date_art', '<', 2020);
-                    break;
-                case '2020_2023':
-                    $query->whereYear('date_art', '>=', 2020)
-                          ->whereYear('date_art', '<=', 2023);
-                    break;
-                case 'after_2023':
-                    $query->whereYear('date_art', '>', 2023);
-                    break;
-            }
+        // Filtrer par date spécifique
+        if (!empty($validated['specific_date'])) {
+            $query->where('date_art', $validated['specific_date']);
         }
 
         // Filtrer par mot-clé
@@ -77,10 +70,13 @@ class SearchController extends Controller
         // Limiter les résultats à 10
         $articles = $query->take(10)->get();
 
-        // Récupérer toutes les catégories pour les options du formulaire
+        // Récupérer toutes les catégories pour le formulaire
         $categories = Category::all();
 
-        // Retourner les résultats et les catégories à la vue
-        return view('recherche', compact('articles', 'categories'));
+        // Récupérer toutes les dates distinctes des articles
+        $dates = Article::select('date_art')->distinct()->orderBy('date_art', 'desc')->pluck('date_art');
+
+        // Retourner les résultats, catégories, et dates à la vue
+        return view('recherche', compact('articles', 'categories', 'dates'));
     }
 }
