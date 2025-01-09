@@ -10,8 +10,6 @@ class SearchController extends Controller
 {
     /**
      * Affiche la page de recherche avec les catégories et les dates disponibles.
-     *
-     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -26,9 +24,6 @@ class SearchController extends Controller
 
     /**
      * Effectue une recherche en fonction des critères du formulaire.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\View\View
      */
     public function search(Request $request)
     {
@@ -36,7 +31,6 @@ class SearchController extends Controller
         $validated = $request->validate([
             'title' => 'nullable|string|max:255',
             'category' => 'nullable|integer|exists:categories,id_cat',
-            'date_range' => 'nullable|string|in:before_2020,2020_2023,after_2023',
             'specific_date' => 'nullable|date',
             'keyword' => 'nullable|string|max:255',
         ]);
@@ -78,5 +72,37 @@ class SearchController extends Controller
 
         // Retourner les résultats, catégories, et dates à la vue
         return view('recherche', compact('articles', 'categories', 'dates'));
+    }
+
+    /**
+     * Affiche la liste des dates distinctes des articles.
+     */
+    public function listDates()
+    {
+        // Récupérer toutes les dates distinctes des articles
+        $dates = Article::select('date_art')
+            ->distinct()
+            ->orderBy('date_art', 'desc')
+            ->get();
+
+        return view('dates', compact('dates'));
+    }
+
+    /**
+     * Affiche les articles pour une date spécifique.
+     * Paramètre de route : {date_art}
+     */
+    public function articlesByDate($date_art)
+    {
+        // Récupérer les articles correspondant à la date
+        $articles = Article::where('date_art', $date_art)
+            ->take(10)
+            ->get();
+
+        // On renvoie 'date_art' à la vue pour l'afficher
+        return view('articles_by_date', [
+            'articles' => $articles,
+            'date_art' => $date_art,
+        ]);
     }
 }

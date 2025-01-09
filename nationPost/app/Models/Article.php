@@ -9,8 +9,11 @@ class Article extends Model
 {
     use HasFactory;
 
-    protected $table = 't_article'; // Nom de la table
-    protected $primaryKey = 'id_art'; // Clé primaire
+    // Nom de la table
+    protected $table = 't_article';
+
+    // Clé primaire
+    protected $primaryKey = 'id_art';
 
     // Champs modifiables
     protected $fillable = [
@@ -23,4 +26,13 @@ class Article extends Model
         'content_art',
         'image_art'
     ];
+
+    /**
+     * Relation : un Article appartient à une Category
+     * (fk_category_art dans t_article pointe sur id_cat dans t_category)
+     */
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'fk_category_art', 'id_cat');
+    }
 }
