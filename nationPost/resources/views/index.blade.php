@@ -184,25 +184,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
-  <script>
-    // JavaScript pour charger le contenu de navbar.html dans l'élément avec l'ID navbar
-    document.addEventListener("DOMContentLoaded", function () {
-      fetch('NavBar.html')
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById('NavBar').innerHTML = data;
-        })
-        .catch(error => console.error('Error loading navbar:', error));
-
-      // JavaScript pour charger le contenu de footer.html dans l'élément avec l'ID footer
-      fetch('Footer.html')
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById('Footer').innerHTML = data;
-        })
-        .catch(error => console.error('Error loading footer:', error));
-    });
-  </script>
 </body>
 
 </html>

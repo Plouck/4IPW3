@@ -10,15 +10,56 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
+  <style>
+    /* Application du thème */
+    body {
+      @if(session('theme') == 'dark')
+        background-color: #333;
+        color: #fff;
+      @elseif(session('theme') == 'grey')
+        background-color: #888;
+        color: #000;
+      @else
+        background-color: #fff;
+        color: #000;
+      @endif
+
+      /* Application de la taille de la police */
+      @if(session('font_size') == 'small')
+        font-size: 12px;
+      @elseif(session('font_size') == 'medium')
+        font-size: 16px;
+      @else
+        font-size: 20px;
+      @endif
+    }
+
+    .article-header {
+      margin-top: 20px;
+    }
+
+    .article-image {
+      width: 100%;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    .article-body {
+      margin-top: 20px;
+    }
+
+    .article-body h2, .article-body h3 {
+      margin-top: 20px;
+    }
+
+  </style>
 </head>
 
 <body>
 
   <!--NavBar-->
   @include('components.NavBar')
-
 
   <div class="container">
     <div class="row justify-content-center">
@@ -79,38 +120,15 @@
             </div>
         </div>
     </div>
-</div>
-
-
+  </div>
 
   <!--Footer-->
   @include('components.Footer')
-
-
 
   <!--Script-->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
-  <script>
-    // JavaScript pour charger le contenu de navbar.html dans l'élément avec l'ID navbar
-    document.addEventListener("DOMContentLoaded", function () {
-      fetch('NavBar.html')
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById('NavBar').innerHTML = data;
-        })
-        .catch(error => console.error('Error loading navbar:', error));
-
-      // JavaScript pour charger le contenu de footer.html dans l'élément avec l'ID footer
-      fetch('Footer.html')
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById('Footer').innerHTML = data;
-        })
-        .catch(error => console.error('Error loading footer:', error));
-    });
-  </script>
 </body>
 
 </html>
