@@ -10,17 +10,55 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
+  <style>
+    /* Application du thème et taille de police */
+    body {
+      @if(session('theme') == 'dark')
+        background-color: #333;
+        color: #fff;
+      @elseif(session('theme') == 'grey')
+        background-color: #888;
+        color: #000;
+      @else
+        background-color: #fff;
+        color: #000;
+      @endif
+
+      /* Application de la taille de la police */
+      @if(session('font_size') == 'small')
+        font-size: 12px;
+      @elseif(session('font_size') == 'medium')
+        font-size: 16px;
+      @else
+        font-size: 20px;
+      @endif
+    }
+
+    .article-header {
+      margin-top: 20px;
+    }
+
+    .article-image {
+      width: 100%;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    .article-body {
+      margin-top: 20px;
+    }
+
+    .article-body h2, .article-body h3 {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 
 <body>
 
   <!--NavBar-->
   @include('components.NavBar')
-
-
-  <hr>
 
   <section class="container">
     <div class="row">
@@ -33,21 +71,8 @@
             <img src="media/article/balle.jpg" class="img-fluid" alt="Harry et Hermione au bal">
           </div>
         </div>
-
       </div>
-  
-      <div class="col-md-3 d-flex border-end">
-        <div class="column-content">
-          <div class="col-md-7">
-            <a href="#" class="card-link">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</a>
-          </div>
-          <div class="col-md-5">
-            <img src="./media/article/vol.gif" class="img-fluid" alt="Harry sur un griffon">
-          </div>
-        </div>
 
-      </div>
-  
       <div class="col-md-3 d-flex border-end">
         <div class="column-content">
           <div class="col-md-7">
@@ -58,7 +83,18 @@
           </div>
         </div>
       </div>
-  
+
+      <div class="col-md-3 d-flex border-end">
+        <div class="column-content">
+          <div class="col-md-7">
+            <a href="#" class="card-link">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</a>
+          </div>
+          <div class="col-md-5">
+            <img src="./media/article/vol.gif" class="img-fluid" alt="Harry sur un griffon">
+          </div>
+        </div>
+      </div>
+
       <div class="col-md-3 d-flex">
         <div class="column-content">
           <div class="col-md-7">
@@ -71,10 +107,6 @@
       </div>
     </div>
   </section>
-  
-  
-  
-
 
   <hr>
 
@@ -82,24 +114,21 @@
     <div class="row">
       <div class="col-12 col-md-3 border-end">
         <h6>CANADA</h6>
-        <a href="#" class="card-link" id="Car-ind">The Liberals are hustling to stop a 'seismic shift' in one of their safest seats
-        </a>
+        <a href="#" class="card-link" id="Car-ind">The Liberals are hustling to stop a 'seismic shift' in one of their safest seats</a>
         <br>
         <img src="./media/icone/camera-video.png" alt="video" id="icone"> with video</img>
         <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 102 comments</img>
         <hr>
         <h6>CANADIAN POLITICS</h6>
 
-        <a href="#" class="card-link" id="Car-ind">Former Calgary mayor Naheed Nenshi voted new Alberta NDP leader in landslide
-          victory </a>
+        <a href="#" class="card-link" id="Car-ind">Former Calgary mayor Naheed Nenshi voted new Alberta NDP leader in landslide victory </a>
         <br>
         <img src="./media/icone/camera-video.png" alt="video" id="icone"> with video</img>
         <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 257 comments</img>
         <hr>
         <h6>NP COMMENT</h6>
 
-        <a href="#" class="card-link" id="Car-ind">Raymond J. de Souza: U.K. shows national service no longer anathema to
-          conservatives </a>
+        <a href="#" class="card-link" id="Car-ind">Raymond J. de Souza: U.K. shows national service no longer anathema to conservatives </a>
         <br>
         <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 52 comments</img>
         <br>
@@ -115,16 +144,13 @@
         <hr>
         <h6>CANADA</h6>
 
-        <a href="#" class="card-link" id="Car-ind">'Stop these criminals from destroying people' says suicide note after victim kills
-          accused Toronto fraudsters </a>
+        <a href="#" class="card-link" id="Car-ind">'Stop these criminals from destroying people' says suicide note after victim kills accused Toronto fraudsters </a>
         <br>
         <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 102 comments</img>
         <hr>
         <h6>CANADA</h6>
 
-        <a href="#" class="card-link" id="Car-ind">'Stop these criminals from destroying people' says suicide note after victim kills
-          accused Toronto fraudsters'Selfless act of heroism': The Canadian sniper who used his body as a shield to save
-          a wounded soldier </a>
+        <a href="#" class="card-link" id="Car-ind">'Stop these criminals from destroying people' says suicide note after victim kills accused Toronto fraudsters'Selfless act of heroism': The Canadian sniper who used his body as a shield to save a wounded soldier </a>
         <br>
         <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 109 comments</img>
       </div>
@@ -141,16 +167,14 @@
           <div class="col-12 col-md-6 border-end">
             <h6>CANADA</h6>
             <br>
-            <a href="#" class="card-link">'Stop these criminals from destroying people' says suicide note after victim
-              kills accused Toronto fraudsters </a>
+            <a href="#" class="card-link">'Stop these criminals from destroying people' says suicide note after victim kills accused Toronto fraudsters </a>
             <br>
             <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 102 comments</img>
           </div>
           <div class="col-12 col-md-6">
             <h6>CANADA</h6>
             <br>
-            <a href="#" class="card-link">'Stop these criminals from destroying people' says suicide note after victim
-              kills accused Toronto fraudsters </a>
+            <a href="#" class="card-link">'Stop these criminals from destroying people' says suicide note after victim kills accused Toronto fraudsters </a>
             <br>
             <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 102 comments</img>
           </div>
@@ -167,18 +191,15 @@
 
         <h5>UP NEXT</h5>
         <hr>
-
+        <iframe width="420" height="280" src="https://www.youtube.com/watch?v=KYuQZUwb4OI"></iframe>
+        <p>Heroes Among Us: Courage in the Presence of the Enemy</p>
+        <p>5 days ago 8:11</p>
       </div>
     </div>
-
   </section>
-
-
 
   <!--Footer-->
   @include('components.Footer')
-
-
 
   <!--Script-->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

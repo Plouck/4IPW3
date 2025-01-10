@@ -1,45 +1,54 @@
 body {
     background-color: #f8f9fa;
-    padding-top: 20px;
+    padding-top: 60px; /* Ajuste cette valeur selon la hauteur de la navbar */
     font-family: 'Verdana', sans-serif;
 }
-.btn img {
-    height: 25px; /* Ajustez la hauteur maximale de l'image */
-    width: auto;  /* Ajustez la largeur maximale de l'image */
+
+nav {
+    background-color: #6a0dad; /* Mauve foncé pour la NavBar */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000; /* Assure-toi que la navbar est au-dessus du contenu */
 }
-footer{
-    background-color: darkviolet;
+
+nav .navbar-brand,
+nav .nav-link {
+    color: black; /* Texte en noir pour les éléments de la NavBar */
 }
-nav{
-    background-color: darkviolet;
+
+nav .navbar-nav .nav-link:hover {
+    color: #000000; /* Couleur claire au survol pour une meilleure interaction */
 }
-#Logo {
-    height: 20px;
-    width: auto;
+
+.container {
+    padding-top: 80px; /* Ajuste cette valeur selon la hauteur de ta navbar */
 }
-@media (min-width: 979px) {
-    body {
-        padding-top: 60px;
-    }
-}
-.card-body{
+
+.card-body {
     width: 18rem;
 }
-#icone{
+
+#icone {
     height: 1rem;
 }
+
 .search-form {
     background-color: #e9ecef;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 .article-header {
     background-color: #343a40;
     color: white;
     padding: 20px;
     border-radius: 5px;
 }
+
 .article-content {
     background-color: white;
     padding: 20px;
@@ -47,30 +56,64 @@ nav{
     margin-top: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 .article-image {
     width: 100%;
     height: auto;
     margin-bottom: 20px;
     border-radius: 5px;
 }
+
 .article-body {
     text-align: justify;
 }
+
 .article-index {
     width: 100%;
     height: auto;
 }
+
 .column-content {
     display: flex;
     align-items: center;
-    height: 100px; /* Adjust the height as needed */
+    height: 100px;
 }
+
 .navbar-secondary .nav-link {
-    color: #000; /* Customize link color */
-    font-size: 14px; /* Adjust font size */
-    text-align: center; /* Center align text */
+    color: black; /* Texte en noir pour les liens dans la NavBar */
+    font-size: 14px;
+    text-align: center;
 }
-#Car-ind{
-    color: #000; /* Customize link color */
-    font-size: 12px; /* Adjust font size */
+
+#Car-ind {
+    color: #000;
+    font-size: 12px;
+}
+
+/* Footer */
+footer {
+    background-color: #6a0dad; /* Mauve foncé pour le footer */
+    color: black; /* Texte en noir */
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer a {
+    color: black; /* Assure que les liens dans le Footer sont aussi noirs */
+}
+
+/* Texte en noir dans le modal */
+.modal-content,
+.modal-header h5,
+.modal-body .form-label,
+.modal-body .form-control {
+    color: black !important; /* Assure que le texte soit en noir */
+}
+
+.modal-body .form-label {
+    font-weight: bold; /* Si tu veux rendre les labels un peu plus distincts */
+}
+
+.modal-body .form-control {
+    color: black; /* Assurer que le texte à l'intérieur des champs de saisie soit également noir */
 }
