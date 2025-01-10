@@ -49,3 +49,8 @@ Route::get('/dates/{date_art}', [SearchController::class, 'articlesByDate'])
 
      Route::get('/article/{id}', [ArticleController::class, 'show'])->name('article.show');
 
+
+// Route pour afficher les articles favoris
+Route::get('/favorites', [ArticleController::class, 'showFavorites'])->name('article.favorites');
+
+Route::post('/article/{id}/favorite', [ArticleController::class, 'addFavorite'])->name('article.addFavorite');

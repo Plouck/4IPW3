@@ -78,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <ul class="navbar-nav">
                         <li class="nav-item"><a class="nav-link" href="{{ route('index') }}">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="article">Articles</a></li>
+                            <li class="nav-item"><a class="nav-link" href="favorites">favorites</a></li>
                             <li class="nav-item"><a class="nav-link" href="recherche">Search</a></li>
                             <hr>
                             <!-- Affichage dynamique des catégories -->
