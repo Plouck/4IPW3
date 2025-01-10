@@ -9,7 +9,7 @@
           <!-- Bouton pour activer le menu offcanvas -->
           <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>Section
+            <span class="navbar-toggler-icon"></span>Menu
           </button>
 
           <!-- Menu offcanvas -->
@@ -38,7 +38,7 @@
           </div>
         </div>
 
-        <!-- Champ de recherche + Bouton "Menu" -->
+        <!-- Champ de recherche (Menu retiré) -->
         <div class="col-8 d-flex align-items-center justify-content-end">
           <!-- Formulaire de recherche -->
           <form class="d-flex me-3" role="search" action="{{ route('search') }}" method="POST">
@@ -48,18 +48,7 @@
             </button>
             <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
           </form>
-
-          <!-- Nouveau bouton "Menu" avec dropdown pour Recherche + Liste des Dates -->
-          <div class="btn-group">
-            <button type="button" class="btn btn-secondary dropdown-toggle"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-              Menu
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="{{ route('recherche') }}">Recherche</a></li>
-              <li><a class="dropdown-item" href="{{ route('listDates') }}">Liste des Dates</a></li>
-            </ul>
-          </div>
+          <!-- (Ancien bouton dropdown "Menu" a été supprimé) -->
         </div>
       </div>
 
@@ -95,8 +84,7 @@
 
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mx-auto">
-          <!-- Supprimé le lien "Index" afin de ne plus rafraîchir via un bouton dédié -->
-          <!-- (Si tu souhaites d'autres liens ici, tu peux les ajouter) -->
+         
         </ul>
       </div>
     </div>
