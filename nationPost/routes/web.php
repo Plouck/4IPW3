@@ -15,13 +15,10 @@ use App\Http\Controllers\ArticleController;
 | groupe de middleware "web".                                               |
 */
 
-Route::match(['get', 'post'], '/index', function () {
-    return view('index'); // Page d'accueil
-})->name('index');
-
+Route::get('/', [ArticleController::class, 'index'])->name('home'); // Page d'accueil
 
 // Route pour afficher la page article
-Route::get('/article', [ArticleController::class, 'show'])->name('article.show');
+Route::get('/article/{id}', [ArticleController::class, 'show'])->name('article.show');
 
 // Route POST pour traiter la soumission d'un article
 Route::post('/article', [ArticleController::class, 'store'])->name('article.store');
@@ -40,9 +37,15 @@ Route::get('/category/{id}', [CategoryController::class, 'show'])->name('categor
 Route::get('/recherche', [SearchController::class, 'showSearchPage'])->name('search');
 Route::get('/recherche/resultats', [SearchController::class, 'search'])->name('search');
 Route::match(['get', 'post'], '/recherche', [SearchController::class, 'search'])->name('search');
+
 // Route pour afficher les dates distinctes
 Route::get('/dates', [SearchController::class, 'listDates'])->name('listDates');
 
 // Route pour afficher les articles d'une date spécifique
 Route::get('/dates/{date_art}', [SearchController::class, 'articlesByDate'])
      ->name('articlesByDate');
+
+     Route::get('/index', [ArticleController::class, 'index'])->name('index');
+
+     Route::get('/article/{id}', [ArticleController::class, 'show'])->name('article.show');
+

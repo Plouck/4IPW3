@@ -3,30 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Article; // N'oublie pas d'importer ton modèle Article si tu veux l'utiliser
+use App\Models\Article;
 
 class ArticleController extends Controller
 {
-    // Afficher la vue article (par exemple, une page d'affichage ou un formulaire)
-    public function show()
+    // Afficher la liste des articles pour la page d'accueil (articles du 15 décembre 2023)
+    public function index()
     {
-        return view('article');
+        // Récupérer les 10 premiers articles publiés le 15 décembre 2023
+        $articles = Article::where('date_art', '2023-12-15')
+    ->orderBy('id_art', 'desc')  // Tri par id_art
+    ->take(10)
+    ->get();
+
+
+        return view('index', compact('articles')); // Passe les articles à la vue index.blade.php
     }
 
-    // Traiter la requête POST (par exemple, enregistrer un article)
+    // Afficher un article spécifique en fonction de l'ID
+    public function show($id)
+{
+    // Récupérer l'article par son ID
+    $article = Article::findOrFail($id);
+    
+    // Passer l'article à la vue
+    return view('article.show', compact('article'));
+}
+
+    // Traiter la soumission d'un nouvel article (si besoin)
     public function store(Request $request)
     {
-        // Validation des données du formulaire (optionnel)
+        // Validation des données du formulaire
         $validated = $request->validate([
             'title' => 'required|max:255',
             'content' => 'required',
         ]);
 
-        // Logique pour enregistrer l'article dans la base de données
-        // Si tu veux enregistrer un nouvel article, décommente cette ligne
-        // Article::create($validated); 
-
-        // Ou si tu souhaites enregistrer l'article de manière plus explicite :
+        // Créer un nouvel article
         $article = new Article;
         $article->title_art = $validated['title'];
         $article->content_art = $validated['content'];

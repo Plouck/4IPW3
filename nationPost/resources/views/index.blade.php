@@ -25,32 +25,87 @@
         color: #000;
       @endif
 
-      /* Application de la taille de la police */
-      @if(session('font_size') == 'small')
-        font-size: 12px;
-      @elseif(session('font_size') == 'medium')
-        font-size: 16px;
-      @else
-        font-size: 20px;
-      @endif
+      font-family: 'Arial', sans-serif;
+    }
+
+    .navbar {
+      background-color: #343a40;
+    }
+
+    .navbar .navbar-brand {
+      color: #fff;
+    }
+
+    .navbar .navbar-brand:hover {
+      color: #ddd;
     }
 
     .article-header {
-      margin-top: 20px;
+      margin-top: 30px;
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-align: center;
     }
 
     .article-image {
       width: 100%;
-      height: auto;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .article-card {
+      transition: transform 0.3s ease-in-out;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .article-card:hover {
+      transform: scale(1.05);
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .article-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .article-title:hover {
+      color: #0056b3;
+    }
+
+    .comments-info img {
+      width: 20px;
+      margin-right: 5px;
+    }
+
+    .comments-info {
+      font-size: 0.9rem;
+      color: #888;
+      margin-top: 10px;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: bold;
       margin-bottom: 20px;
+      color: #343a40;
     }
 
-    .article-body {
-      margin-top: 20px;
+    .video-section iframe {
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    .article-body h2, .article-body h3 {
-      margin-top: 20px;
+    .col-md-3, .col-md-5, .col-md-4 {
+      margin-bottom: 30px;
     }
   </style>
 </head>
@@ -62,49 +117,21 @@
 
   <section class="container">
     <div class="row">
-      <div class="col-md-3 d-flex border-end">
-        <div class="column-content">
-          <div class="col-md-7">
-            <a href="#" class="card-link">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</a>
-          </div>
-          <div class="col-md-5">
-            <img src="media/article/balle.jpg" class="img-fluid" alt="Harry et Hermione au bal">
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3 d-flex border-end">
-        <div class="column-content">
-          <div class="col-md-7">
-            <a href="#" class="card-link">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</a>
-          </div>
-          <div class="col-md-5">
-            <img src="./media/article/vol.gif" class="img-fluid" alt="Harry sur un griffon">
+      @foreach($articles as $article)
+        <div class="col-md-3">
+          <div class="article-card mb-4">
+            <img src="{{ asset('media/article/'.$article->image_art) }}" class="article-image" alt="{{ $article->title_art }}">
+            <div class="card-body">
+              <a href="{{ route('article.show', ['id' => $article->id_art]) }}" class="article-title">
+                {{ $article->title_art }}
+              </a>
+              <div class="comments-info">
+                <img src="./media/icone/commenter.png" alt="commenter"> 102 comments
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="col-md-3 d-flex border-end">
-        <div class="column-content">
-          <div class="col-md-7">
-            <a href="#" class="card-link">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</a>
-          </div>
-          <div class="col-md-5">
-            <img src="./media/article/vol.gif" class="img-fluid" alt="Harry sur un griffon">
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3 d-flex">
-        <div class="column-content">
-          <div class="col-md-7">
-            <a href="#" class="card-link">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</a>
-          </div>
-          <div class="col-md-5">
-            <img src="./media/article/vol.gif" class="img-fluid" alt="Harry sur un griffon">
-          </div>
-        </div>
-      </div>
+      @endforeach
     </div>
   </section>
 
@@ -112,85 +139,53 @@
 
   <section class="container">
     <div class="row">
-      <div class="col-12 col-md-3 border-end">
-        <h6>CANADA</h6>
-        <a href="#" class="card-link" id="Car-ind">The Liberals are hustling to stop a 'seismic shift' in one of their safest seats</a>
+      <div class="col-md-3">
+        <h5 class="section-title">CANADA</h5>
+        <a href="#" class="card-link">The Liberals are hustling to stop a 'seismic shift' in one of their safest seats</a>
         <br>
-        <img src="./media/icone/camera-video.png" alt="video" id="icone"> with video</img>
-        <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 102 comments</img>
+        <img src="./media/icone/camera-video.png" alt="video"> with video
+        <br>
+        <img src="./media/icone/commenter.png" alt="commenter"> 102 comments
         <hr>
-        <h6>CANADIAN POLITICS</h6>
-
-        <a href="#" class="card-link" id="Car-ind">Former Calgary mayor Naheed Nenshi voted new Alberta NDP leader in landslide victory </a>
-        <br>
-        <img src="./media/icone/camera-video.png" alt="video" id="icone"> with video</img>
-        <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 257 comments</img>
-        <hr>
-        <h6>NP COMMENT</h6>
-
-        <a href="#" class="card-link" id="Car-ind">Raymond J. de Souza: U.K. shows national service no longer anathema to conservatives </a>
-        <br>
-        <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 52 comments</img>
-        <br>
-        <p>Father Raymond J. de Souza</p>
-        <hr>
-        <h6>NP COMMENT</h6>
-
-        <a href="#" class="card-link" id="Car-ind">NP View: Canada still has war heroes. We must remember how to honour them </a>
-        <br>
-        <p>National Post View</p>
-        <br>
-        <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 84 comments</img>
-        <hr>
-        <h6>CANADA</h6>
-
-        <a href="#" class="card-link" id="Car-ind">'Stop these criminals from destroying people' says suicide note after victim kills accused Toronto fraudsters </a>
-        <br>
-        <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 102 comments</img>
-        <hr>
-        <h6>CANADA</h6>
-
-        <a href="#" class="card-link" id="Car-ind">'Stop these criminals from destroying people' says suicide note after victim kills accused Toronto fraudsters'Selfless act of heroism': The Canadian sniper who used his body as a shield to save a wounded soldier </a>
-        <br>
-        <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 109 comments</img>
+        <h5 class="section-title">CANADIAN POLITICS</h5>
+        <a href="#" class="card-link">Former Calgary mayor Naheed Nenshi voted new Alberta NDP leader in landslide victory</a>
       </div>
 
-      <div class="col-12 col-md-5">
+      <div class="col-md-5">
         <a href="./article.html">
-          <img src="./media/article/harry-potter-4-theorie.jpg" class="article-index" alt="Harry Potter">
+          <img src="./media/article/harry-potter-4-theorie.jpg" class="article-image mb-3" alt="Harry Potter">
         </a>
         <h6>PERDU, IL DECOUVRIR LA COUPE DE FEU !</h6>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-        <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 240 comments</img>
+        <div class="comments-info">
+          <img src="./media/icone/commenter.png" alt="commenter"> 240 comments
+        </div>
         <hr>
         <div class="row">
-          <div class="col-12 col-md-6 border-end">
+          <div class="col-6">
             <h6>CANADA</h6>
-            <br>
-            <a href="#" class="card-link">'Stop these criminals from destroying people' says suicide note after victim kills accused Toronto fraudsters </a>
-            <br>
-            <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 102 comments</img>
+            <a href="#" class="card-link">Article Link</a>
+            <div class="comments-info">
+              <img src="./media/icone/commenter.png" alt="commenter"> 102 comments
+            </div>
           </div>
-          <div class="col-12 col-md-6">
+          <div class="col-6">
             <h6>CANADA</h6>
-            <br>
-            <a href="#" class="card-link">'Stop these criminals from destroying people' says suicide note after victim kills accused Toronto fraudsters </a>
-            <br>
-            <img src="./media/icone/commenter.png" alt="commenter" id="icone"> 102 comments</img>
+            <a href="#" class="card-link">Article Link</a>
+            <div class="comments-info">
+              <img src="./media/icone/commenter.png" alt="commenter"> 102 comments
+            </div>
           </div>
         </div>
-
       </div>
 
-      <div class="col-12 col-md-4 border-start">
-        <h5>LATEST VIDEOS</h5>
-        <hr>
+      <div class="col-md-4 video-section">
+        <h5 class="section-title">LATEST VIDEOS</h5>
         <iframe width="420" height="280" src="https://www.youtube.com/watch?v=KYuQZUwb4OI"></iframe>
         <p>Heroes Among Us: Courage in the Presence of the Enemy</p>
         <p>3 days ago 5:11</p>
 
-        <h5>UP NEXT</h5>
-        <hr>
+        <h5 class="section-title">UP NEXT</h5>
         <iframe width="420" height="280" src="https://www.youtube.com/watch?v=KYuQZUwb4OI"></iframe>
         <p>Heroes Among Us: Courage in the Presence of the Enemy</p>
         <p>5 days ago 8:11</p>
