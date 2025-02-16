@@ -1,12 +1,10 @@
 <?php
-// Connexion à la base de données
+// Connexion à la base de données (mauvaise pratique en Laravel, mais gardée comme demandée)
 $pdo = new PDO('mysql:host=127.0.0.1;dbname=press_2024_v03', 'root', '');
-
-// Requête pour récupérer les catégories
 $stmt = $pdo->query("SELECT id_cat, name_cat FROM t_category");
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Démarrage de la session
+// Démarrage de la session (Laravel utilise session()->put() normalement)
 session_start();
 
 // Message à afficher après la requête POST
@@ -15,45 +13,26 @@ $message = "";
 // Gestion des actions de connexion/déconnexion et préférences
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
-        // Connexion
         if ($_POST['action'] === 'login') {
             $username = $_POST['username'] ?? '';
             $password = $_POST['password'] ?? '';
             if ($username === 'admin' && $password === 'password') {
                 $_SESSION['user'] = ['username' => $username];
                 $message = "Connexion réussie !";
-                header('Location: index'); // Redirection vers la page d'accueil
+                header('Location: index');
                 exit();
             } else {
                 $message = "Identifiants incorrects.";
             }
-        }
-        // Déconnexion
-        elseif ($_POST['action'] === 'logout') {
+        } elseif ($_POST['action'] === 'logout') {
             unset($_SESSION['user']);
             $message = "Déconnexion réussie !";
-        }
-        // Gestion des préférences
-        elseif ($_POST['action'] === 'set_preferences') {
-            $valid_themes = ['light', 'dark', 'grey'];
-            $valid_font_sizes = ['small', 'medium', 'large'];
-
-            $theme = $_POST['theme'] ?? 'light';
-            $font_size = $_POST['font_size'] ?? 'medium';
-
-            // Vérifier les valeurs sélectionnées
-            if (in_array($theme, $valid_themes)) {
-                $_SESSION['theme'] = $theme;
-            }
-            if (in_array($font_size, $valid_font_sizes)) {
-                $_SESSION['font_size'] = $font_size;
-            }
         }
     }
 }
 ?>
 
-<!-- Affichage du message de confirmation -->
+<!-- Affichage du message -->
 <?php if ($message): ?>
     <div class="alert alert-info" role="alert">
         <?= htmlspecialchars($message); ?>
@@ -76,15 +55,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="offcanvas-body">
                         <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="{{ route('index') }}">Home</a></li>
-                            <li class="nav-item"><a class="nav-link" href="article">Articles</a></li>
-                            <li class="nav-item"><a class="nav-link" href="favorites">favorites</a></li>
-                            <li class="nav-item"><a class="nav-link" href="recherche">Search</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('index') }}">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('article.favorites') }}">Favorites</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('search') }}">Search</a></li>
                             <hr>
-                            <!-- Affichage dynamique des catégories -->
+                            <!-- Affichage des catégories -->
                             <?php foreach ($categories as $category): ?>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="category?id=<?= $category['id_cat'] ?>">
+                                    <a class="nav-link" href="{{ url('category', $category['id_cat']) }}">
                                         <?= htmlspecialchars($category['name_cat'], ENT_QUOTES, 'UTF-8') ?>
                                     </a>
                                 </li>
@@ -94,19 +72,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
-            <!-- Options de présentation : Thème et Taille de police -->
+            <!-- Options de présentation -->
             <div class="col-4 text-end">
-                <form method="POST" action="" class="d-inline-block">
-                    <input type="hidden" name="action" value="set_preferences">
+                <form method="POST" action="{{ route('set.preferences') }}" class="d-inline-block">
+                    @csrf
                     <select name="theme" onchange="this.form.submit()" class="form-select">
-                        <option value="light" <?= ($_SESSION['theme'] ?? 'light') === 'light' ? 'selected' : '' ?>>Light</option>
-                        <option value="dark" <?= ($_SESSION['theme'] ?? 'light') === 'dark' ? 'selected' : '' ?>>Dark</option>
-                        <option value="grey" <?= ($_SESSION['theme'] ?? 'light') === 'grey' ? 'selected' : '' ?>>Grey</option>
+                        <option value="light" {{ session('theme', 'light') === 'light' ? 'selected' : '' }}>Light</option>
+                        <option value="dark" {{ session('theme', 'light') === 'dark' ? 'selected' : '' }}>Dark</option>
+                        <option value="grey" {{ session('theme', 'light') === 'grey' ? 'selected' : '' }}>Grey</option>
                     </select>
                     <select name="font_size" onchange="this.form.submit()" class="form-select">
-                        <option value="small" <?= ($_SESSION['font_size'] ?? 'medium') === 'small' ? 'selected' : '' ?>>Small</option>
-                        <option value="medium" <?= ($_SESSION['font_size'] ?? 'medium') === 'medium' ? 'selected' : '' ?>>Medium</option>
-                        <option value="large" <?= ($_SESSION['font_size'] ?? 'medium') === 'large' ? 'selected' : '' ?>>Large</option>
+                        <option value="small" {{ session('font_size', 'medium') === 'small' ? 'selected' : '' }}>Small</option>
+                        <option value="medium" {{ session('font_size', 'medium') === 'medium' ? 'selected' : '' }}>Medium</option>
+                        <option value="large" {{ session('font_size', 'medium') === 'large' ? 'selected' : '' }}>Large</option>
                     </select>
                 </form>
             </div>
@@ -115,8 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="col-4 text-end">
                 <?php if (isset($_SESSION['user'])): ?>
                     <span class="me-3">Bonjour, <?= htmlspecialchars($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8') ?> !</span>
-                    <form method="POST" style="display:inline;">
-                        <input type="hidden" name="action" value="logout">
+                    <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+                        @csrf
                         <button type="submit" class="btn btn-outline-danger">Se déconnecter</button>
                     </form>
                 <?php else: ?>
@@ -136,8 +114,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="">
-                    <input type="hidden" name="action" value="login">
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
                     <div class="mb-3">
                         <label for="username" class="form-label">Nom d'utilisateur</label>
                         <input type="text" name="username" id="username" class="form-control" required>
@@ -153,27 +131,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-<!-- Ajout du style dynamique -->
+<!-- Style dynamique -->
 <style>
     body {
         <?php
-            // Application du thème de couleur
-            if ($_SESSION['theme'] === 'dark') {
-                echo 'background-color: #333; color: #fff;';
-            } elseif ($_SESSION['theme'] === 'grey') {
-                echo 'background-color: #ccc; color: #333;';
-            } else {
-                echo 'background-color: #fff; color: #000;';
-            }
+        if (session('theme', 'light') === 'dark') {
+            echo 'background-color: #333; color: #fff;';
+        } elseif (session('theme', 'light') === 'grey') {
+            echo 'background-color: #ccc; color: #333;';
+        } else {
+            echo 'background-color: #fff; color: #000;';
+        }
 
-            // Application de la taille de la police
-            if ($_SESSION['font_size'] === 'small') {
-                echo 'font-size: 12px;';
-            } elseif ($_SESSION['font_size'] === 'large') {
-                echo 'font-size: 18px;';
-            } else {
-                echo 'font-size: 14px;';
-            }
+        if (session('font_size', 'medium') === 'small') {
+            echo 'font-size: 12px;';
+        } elseif (session('font_size', 'medium') === 'large') {
+            echo 'font-size: 18px;';
+        } else {
+            echo 'font-size: 14px;';
+        }
         ?>
     }
 </style>
