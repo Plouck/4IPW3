@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers;
 
@@ -8,45 +8,43 @@ use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
+    // Affiche le formulaire de recherche
+    public function showSearchPage()
+    {
+        $categories = Category::all();
+        return view('recherche', compact('categories'));
+    }
+
+    // Exécute la recherche et affiche directement les résultats
     public function search(Request $request)
     {
-        // Récupérer toutes les catégories et dates distinctes pour le formulaire de recherche
-        $categories = Category::all();  
-        $dates = Article::select('date_art')->distinct()->orderBy('date_art', 'desc')->pluck('date_art');
-        
-        // Si c'est une requête POST, effectuer la recherche
-        if ($request->isMethod('post')) {
-            $title = $request->get('title');
-            $category = $request->get('category');
-            $specific_date = $request->get('specific_date');
-            $keyword = $request->get('keyword');
+        $query = Article::with('category'); // ✅ Charger la relation "category"
 
-            $query = Article::query();
-
-            if ($title) {
-                $query->where('title_art', 'like', '%' . $title . '%');
-            }
-
-            if ($category) {
-                $query->where('fk_category_art', $category);
-            }
-
-            if ($specific_date) {
-                $query->where('date_art', $specific_date);
-            }
-
-            if ($keyword) {
-                $query->where('content_art', 'like', '%' . $keyword . '%');
-            }
-
-            // Récupérer les articles correspondant à la recherche
-            $articles = $query->get();
-
-            // Retourner les résultats de recherche à la vue
-            return view('recherche', compact('articles', 'categories', 'dates'));
+        // Filtrage dynamique basé sur les entrées utilisateur
+        if ($request->filled('title')) {
+            $query->where('title_art', 'like', '%' . $request->title . '%');
+        }
+        if ($request->filled('category')) {
+            $query->where('fk_category_art', $request->category);
+        }
+        if ($request->filled('specific_date') && $request->specific_date !== 'Aucune') {
+            // Reformater la date du slider pour correspondre à `YYYY-MM-DD`
+            $day = str_pad($request->specific_date, 2, '0', STR_PAD_LEFT);
+            $dateFormatted = "2023-12-{$day}";  
+            $query->where('date_art', $dateFormatted);
+        }
+        if ($request->filled('keyword')) {
+            $query->where('content_art', 'like', '%' . $request->keyword . '%');
+        }
+        if ($request->filled('readtime')) {
+            $query->where('readtime_art', $request->readtime); // Durée de lecture exacte
+            // Optionnel : si tu veux faire un filtre plus large (ex: <= durée choisie) :
+            // $query->where('readtime_art', '<=', $request->readtime);
         }
 
-        // Si la méthode est GET, afficher le formulaire de recherche sans résultats
-        return view('recherche', compact('categories', 'dates'));
+        // Récupération des articles correspondants avec leur catégorie
+        $articles = $query->get();
+
+        return view('searchResults', compact('articles'));
     }
 }
