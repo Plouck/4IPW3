@@ -8,21 +8,13 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
-/*
-|---------------------------------------------------------------------------|
-| Web Routes                                                                |
-|---------------------------------------------------------------------------|
-| Ici, vous pouvez enregistrer les routes web pour votre application.      |
-| Ces routes sont chargées par le RouteServiceProvider et assignées au     |
-| groupe de middleware "web".                                               |
-*/
+// Route de la page d'accueil
+Route::get('/', [ArticleController::class, 'index'])->name('home');
 
-Route::get('/', [ArticleController::class, 'index'])->name('home'); // Page d'accueil
-
-// Route pour afficher la page article
+// Route pour afficher un article spécifique
 Route::get('/article/{id}', [ArticleController::class, 'show'])->name('article.show');
 
-// Route POST pour traiter la soumission d'un article
+// Route pour soumettre un article
 Route::post('/article', [ArticleController::class, 'store'])->name('article.store');
 
 // Routes pour la connexion et l'inscription
@@ -35,19 +27,17 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.po
 // Route de déconnexion (POST uniquement)
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Route pour gérer les préférences (thème, taille de police)
-Route::post('/set-preferences', [AuthController::class, 'setPreferences'])->name('set.preferences');
-
-// Route pour afficher les articles par catégorie
+// Routes pour les catégories
 Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category.show');
 
-// Route de recherche
-Route::get('/recherche', [SearchController::class, 'showSearchPage'])->name('search');
-Route::get('/recherche/resultats', [SearchController::class, 'search'])->name('search');
-Route::match(['get', 'post'], '/recherche', [SearchController::class, 'search'])->name('search');
+// Routes de recherche
+Route::get('/recherche', [SearchController::class, 'showSearchPage'])->name('search'); 
+Route::post('/recherche', [SearchController::class, 'search'])->name('search'); 
+Route::get('/recherche/resultats', [SearchController::class, 'searchResults'])->name('search.results');
 
-// Route pour afficher les dates distinctes
-Route::get('/dates', [SearchController::class, 'listDates'])->name('listDates');
+// Routes pour gérer les articles favoris
+Route::get('/favorites', [ArticleController::class, 'showFavorites'])->name('article.favorites');
+Route::post('/article/{id}/favorite', [ArticleController::class, 'addFavorite'])->name('article.addFavorite');
 
 // Route pour afficher les articles d'une date spécifique
 Route::get('/dates/{date_art}', [SearchController::class, 'articlesByDate'])->name('articlesByDate');

@@ -1,7 +1,17 @@
+<!-- Importation de la police Playfair Display -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <body class="{{ session('theme', 'default') }} {{ session('font_size', 'default') }} {{ session('font_family', 'default') }}">
 </body>
 <nav class="navbar fixed-top bg-light">
     <div class="container-fluid">
+        
+        <!-- Bloc pour afficher le titre du site -->
+        <div class="col-12 text-center py-3" style="background-color: #6a0dad;">
+            <h1 class="fw-bold m-0" style="font-size: 2.5rem; font-family: 'Playfair Display', serif; color: white;">
+                NationalPost
+            </h1>
+        </div>
+
         <div class="row w-100 align-items-center">
 
             <!-- Menu Offcanvas -->
@@ -11,7 +21,6 @@
                 </button>
                 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">National Post</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body">
