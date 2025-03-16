@@ -2,9 +2,9 @@ body {
     background-color: #f8f9fa;
     padding-top: 60px; /* Ajuste cette valeur selon la hauteur de la navbar */
     font-family: 'Verdana', sans-serif;
-}
-
-nav {
+  }
+  
+  nav {
     background-color: #6a0dad; /* Mauve foncé pour la NavBar */
     position: fixed;
     top: 0;
@@ -12,108 +12,170 @@ nav {
     right: 0;
     width: 100%;
     z-index: 1000; /* Assure-toi que la navbar est au-dessus du contenu */
-}
-
-nav .navbar-brand,
-nav .nav-link {
+  }
+  
+  nav .navbar-brand,
+  nav .nav-link {
     color: black; /* Texte en noir pour les éléments de la NavBar */
-}
-
-nav .navbar-nav .nav-link:hover {
+  }
+  
+  nav .navbar-nav .nav-link:hover {
     color: #000000; /* Couleur claire au survol pour une meilleure interaction */
-}
-
-.container {
+  }
+  
+  .container {
     padding-top: 80px; /* Ajuste cette valeur selon la hauteur de ta navbar */
-}
-
-.card-body {
+  }
+  
+  .card-body {
     width: 18rem;
-}
-
-#icone {
+  }
+  
+  #icone {
     height: 1rem;
-}
-
-.search-form {
+  }
+  
+  .search-form {
     background-color: #e9ecef;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.article-header {
+  }
+  
+  .article-header {
     background-color: #343a40;
     color: white;
     padding: 20px;
     border-radius: 5px;
-}
-
-.article-content {
+  }
+  
+  .article-content {
     background-color: white;
     padding: 20px;
     border-radius: 5px;
     margin-top: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.article-image {
+  }
+  
+  .article-image {
     width: 100%;
     height: auto;
     margin-bottom: 20px;
     border-radius: 5px;
-}
-
-.article-body {
+  }
+  
+  .article-body {
     text-align: justify;
-}
-
-.article-index {
+  }
+  
+  .article-index {
     width: 100%;
     height: auto;
-}
-
-.column-content {
+  }
+  
+  .column-content {
     display: flex;
     align-items: center;
     height: 100px;
-}
-
-.navbar-secondary .nav-link {
+  }
+  
+  .navbar-secondary .nav-link {
     color: black; /* Texte en noir pour les liens dans la NavBar */
     font-size: 14px;
     text-align: center;
-}
-
-#Car-ind {
+  }
+  
+  #Car-ind {
     color: #000;
     font-size: 12px;
-}
-
-/* Footer */
-footer {
+  }
+  
+  /* Footer */
+  footer {
     background-color: #6a0dad; /* Mauve foncé pour le footer */
     color: black; /* Texte en noir */
     padding: 20px 0;
     text-align: center;
-}
-
-footer a {
+  }
+  
+  footer a {
     color: black; /* Assure que les liens dans le Footer sont aussi noirs */
-}
-
-/* Texte en noir dans le modal */
-.modal-content,
-.modal-header h5,
-.modal-body .form-label,
-.modal-body .form-control {
+  }
+  
+  /* Texte en noir dans le modal */
+  .modal-content,
+  .modal-header h5,
+  .modal-body .form-label,
+  .modal-body .form-control {
     color: black !important; /* Assure que le texte soit en noir */
-}
-
-.modal-body .form-label {
+  }
+  
+  .modal-body .form-label {
     font-weight: bold; /* Si tu veux rendre les labels un peu plus distincts */
-}
-
-.modal-body .form-control {
+  }
+  
+  .modal-body .form-control {
     color: black; /* Assurer que le texte à l'intérieur des champs de saisie soit également noir */
-}
+  }
+  
+  .comments-info img {
+    width: 20px; /* Modifie la taille selon ce que tu veux */
+    height: auto; /* Maintient les proportions */
+  }
+  
+  /* Style pour le panneau d'informations affiché au survol */
+  #article-hover-info {
+    position: fixed; /* Utilisation de 'fixed' pour qu'il reste à l'endroit voulu même lors du défilement */
+    bottom: 20px; /* Positionne à 20px du bas de la page */
+    right: 20px; /* Positionne à 20px du bord droit */
+    width: 300px;
+    background-color: rgba(0, 0, 0, 0.8); /* Fond sombre */
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    display: none; /* C'est caché par défaut */
+  }
+  
+  #article-hover-info h5 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  
+  #article-hover-info p {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+  
+  #article-hover-info .btn-outline-light {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+  }
+  
+  /* Effet de transition pour l'affichage du panneau */
+  #article-hover-info {
+    transition: opacity 0.3s ease;
+  }
+  
+  .article-card {
+    position: relative; /* Pour positionner correctement le panneau */
+  }
+  
+/* Thèmes */
+body.light { background-color: #ffffff; color: #000000; }
+body.dark { background-color: #343a40; color: #ffffff; }
+body.grey { background-color: #f1f1f1; color: #333333; }
+body.yellow { background-color: #fffacd; color: #000000; }
+body.rose { background-color: #ffc0cb; color: #000000; }
+body.blue { background-color: #add8e6; color: #000000; }
+
+/* Tailles de police */
+body.small { font-size: 14px; }
+body.medium { font-size: 16px; }
+body.large { font-size: 18px; }
+
+/* Polices d'écriture */
+body.arial { font-family: Arial, sans-serif; }
+body.times { font-family: 'Times New Roman', Times, serif; }
+body.courier { font-family: 'Courier New', Courier, monospace; }
