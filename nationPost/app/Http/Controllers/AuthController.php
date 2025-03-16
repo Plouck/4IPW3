@@ -126,4 +126,15 @@ class AuthController extends Controller
         return back()->with('message', 'Préférences mises à jour.');
     }
 
+    public function update(Request $request)
+    {
+        session([
+            'theme' => $request->input('theme', 'default'),
+            'font_size' => $request->input('font_size', 'default'),
+            'font_family' => $request->input('font_family', 'default'),
+        ]);
+
+        return back();
+    }
+
 }

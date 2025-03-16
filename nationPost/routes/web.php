@@ -65,3 +65,5 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('auth');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+Route::post('/set-preferences', [AuthController::class, 'update'])->name('set.preferences');
