@@ -11,7 +11,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 // Route de la page d'accueil
 Route::get('/', [ArticleController::class, 'index'])->name('home');
 
-// Route pour afficher un article spécifique
+// Route pour afficher un article spécifique (page complète, si besoin)
 Route::get('/article/{id}', [ArticleController::class, 'show'])->name('article.show');
 
 // Routes pour l'authentification
@@ -26,10 +26,22 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.po
 // Routes pour les catégories
 Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category.show');
 
-// Routes de recherche
+
+// ========= Routes de recherche en mode SPA =========
+
+// Affichage de la page de recherche (formulaire + zones dynamiques)
 Route::get('/recherche', [SearchController::class, 'showSearchPage'])->name('search');
-Route::post('/recherche', [SearchController::class, 'search'])->name('search');
-Route::get('/recherche/resultats', [SearchController::class, 'searchResults'])->name('search.results');
+
+// Route AJAX pour exécuter la recherche et renvoyer les résultats en JSON
+Route::get('/search-ajax', [SearchController::class, 'searchAjax'])->name('search.ajax');
+
+// Route AJAX pour afficher les informations d'un article (pour l'affichage dynamique)
+Route::get('/article-info/{id}', [ArticleController::class, 'getArticleInfo'])->name('article.info');
+
+// Route pour la page "À propos"
+Route::get('/apropos', function () {
+    return view('apropos'); // On renvoie une vue "apropos.blade.php"
+})->name('apropos');
 
 // Route pour afficher les articles d'une date spécifique
 Route::get('/dates/{date_art}', [SearchController::class, 'articlesByDate'])->name('articlesByDate');
@@ -55,3 +67,22 @@ Route::get('/favorites/count', [ArticleController::class, 'favoriteCount'])->nam
 Route::post('/article/{id}/favorite', [ArticleController::class, 'addFavorite'])->name('article.addFavorite');
 
 Route::get('/favorites/list', [ArticleController::class, 'favoriteList'])->name('favorites.list');
+// Routes pour le tableau de bord
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('auth');
+
+// Route pour mettre à jour les préférences
+Route::post('/set-preferences', [AuthController::class, 'update'])->name('set.preferences');
+
+
+// ========= Routes pour l'inscription avec RegisteredUserController =========
+Route::get('/register-alt', [RegisteredUserController::class, 'create'])->name('register.alt');
+// La route GET ci-dessus affiche un autre formulaire d'inscription (alternatif).
+// Tu peux renommer l'URL en /register si tu préfères unifier.
+
+// La route POST ci-dessous appelle la méthode store() du RegisteredUserController
+Route::post('/register-alt', [RegisteredUserController::class, 'store'])->name('register.store');

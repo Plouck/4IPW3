@@ -28,19 +28,14 @@
                             <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('favorites.show') }}">Favorites <span id="favoritesCount"></span></a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('search') }}">Search</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('apropos') }}">À propos</a></li>
+                            <!-- Lien vers le Dashboard uniquement pour les admins -->
                             @auth
                                 @if (Auth::user()->role === 'admin')
                                     <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
                                 @endif
                             @endauth
                             <hr>
-                            @foreach ($categories as $category)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('category.show', $category->id_cat) }}">
-                                        {{ $category->name_cat }}
-                                    </a>
-                                </li>
-                            @endforeach
                         </ul>
                     </div>
                 </div>

@@ -1,102 +1,237 @@
-<!doctype html>
-<html lang="fr">
+<!-- Exemple de recherche.blade.php -->
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>National Post - Recherche</title>
+    <meta charset="UTF-8">
+    <title>Recherche d’articles (SPA)</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">
+    <!-- Lien Bootstrap CSS, jQuery, etc. si besoin -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Pour que le contenu ne soit pas masqué par la navbar fixed-top, on ajoute un padding-top sur le body */
+        body {
+            padding-top: 200px; 
+        }
+        .content-wrapper {
+            margin-top: 0; 
+        }
+        .container-spa {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px;
+        }
+        .spa-box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            min-height: 300px;
+        }
+        .article-link {
+            text-decoration: none;
+            color: blue;
+            cursor: pointer;
+        }
+        .article-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
+<body class="{{ session('theme', 'default') }} {{ session('font_size', 'default') }} {{ session('font_family', 'default') }}">
 
-<body>
-    @include('components.NavBar')
+    <!-- Insertion de la navbar -->
+    @include('partials.navbar')
 
-    <div class="container mt-5">
-        <h1 class="mb-4 text-center">Page de Recherche</h1>
+    <div class="content-wrapper">
+        <div class="container-spa">
+            <!-- Colonne de gauche : Formulaire -->
+            <div class="spa-box">
+                <h2>Critères</h2>
+                <form id="search-form">
+                    <div class="mb-3">
+                        <label>Titre :
+                            <input type="text" name="title" class="form-control">
+                        </label>
+                    </div>
 
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+                    <div class="mb-3">
+                        <label>Catégorie :
+                            <select name="category" class="form-select">
+                                <option value="">Toutes</option>
+                                @foreach($categories as $cat)
+                                    <option value="{{ $cat->id_cat }}">{{ $cat->name_cat }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
+
+                    <!-- Zone pour le filtre de date -->
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="date_filter_enabled">
+                            <label class="form-check-label" for="date_filter_enabled">
+                                Utiliser le filtre de date
+                            </label>
+                        </div>
+                        
+                        <label for="specific_date_slider" class="form-label">
+                            Date (jour) : <span id="sliderValue">01/12/2023</span>
+                        </label>
+                        <!-- Le slider est désactivé par défaut -->
+                        <input type="range" class="form-range" id="specific_date_slider" min="1" max="31" value="1" disabled>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Mot-clé :
+                            <input type="text" name="keyword" class="form-control">
+                        </label>
+                    </div>
+                    <div class="mb-3">
+                        <label>Durée de lecture :
+                            <input type="number" name="readtime" class="form-control">
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-2">Chercher</button>
+                </form>
             </div>
-        @endif
 
-        <form action="{{ route('search') }}" method="POST">
-            @csrf
-            <div class="mb-3">
-                <label for="title" class="form-label">Nom de l'article</label>
-                <input type="text" class="form-control" name="title" placeholder="Entrez le nom de l'article">
+            <!-- Colonne de droite : Résultats -->
+            <div class="spa-box">
+                <h2>Résultats</h2>
+                <div id="search-results">
+                    <!-- Les résultats de la recherche seront injectés ici -->
+                </div>
             </div>
+        </div>
 
-            <div class="mb-3">
-                <label for="category" class="form-label">Catégorie</label>
-                <select name="category" class="form-control">
-                    <option value="">Toutes les catégories</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id_cat }}">{{ $category->name_cat }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Date de parution</label>
-                <input type="checkbox" id="disableDate" checked> Désactiver le filtre par date
-                <input type="range" id="dateSlider" name="specific_date" class="form-range" min="1" max="31" disabled>
-                <p id="selectedDate" class="text-center fw-bold">Date sélectionnée : Aucune</p>
-            </div>
-
-            <div class="mb-3">
-                <label for="readtime" class="form-label">Durée de lecture (minutes)</label>
-                <input type="number" min="1" class="form-control" name="readtime" placeholder="Ex: 1">
-            </div>
-
-            <div class="mb-3">
-                <label for="keyword" class="form-label">Mot-clé</label>
-                <input type="text" class="form-control" name="keyword" placeholder="Entrez un mot-clé">
-            </div>
-
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">Rechercher</button>
-            </div>
-        </form>
+        <!-- Zone en bas pour l'article sélectionné -->
+        <div class="mx-3 spa-box" id="article-content">
+            <h2>Article sélectionné</h2>
+            <p>Le contenu de l'article s'affichera ici.</p>
+        </div>
     </div>
 
-    @include('components.Footer')
+    <!-- Insertion du footer -->
+    @include('partials.footer')
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Scripts JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Script pour le slider -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var slider = document.getElementById("dateSlider");
-            var output = document.getElementById("selectedDate");
-            var disableDateCheckbox = document.getElementById("disableDate");
+    $(document).ready(function() {
 
-            function updateDate() {
-                if (slider.disabled) {
-                    output.innerHTML = "Date sélectionnée : Aucune";
-                    slider.value = ""; // Ne pas envoyer de valeur si le filtre est désactivé
-                } else {
-                    let day = slider.value.padStart(2, '0');
-                    output.innerHTML = "Date sélectionnée : " + day + "/12/2023";
-                }
-            }
+        // Fonction utilitaire pour formater le jour en DD/12/2023
+        function formatDate(day) {
+            // Ajoute un 0 si day < 10
+            let dayStr = day < 10 ? '0' + day : day;
+            return dayStr + '/12/2023';
+        }
 
-            slider.addEventListener("input", updateDate);
+        // Mettre à jour l'affichage initial du slider (si tu veux le jour 1 par défaut)
+        $('#sliderValue').text(formatDate($('#specific_date_slider').val()));
 
-            disableDateCheckbox.addEventListener("change", function() {
-                slider.disabled = this.checked;
-                updateDate();
-            });
-
-            updateDate();
+        // Mettre à jour la valeur affichée du slider au déplacement
+        $('#specific_date_slider').on('input', function() {
+            let day = $(this).val();
+            $('#sliderValue').text(formatDate(day));
         });
+
+        // Activer/désactiver le slider selon la case à cocher
+        $('#date_filter_enabled').on('change', function() {
+            if($(this).is(':checked')) {
+                // Active le slider et ajoute le name pour qu'il soit envoyé
+                $('#specific_date_slider').prop('disabled', false).attr('name', 'specific_date');
+            } else {
+                // Désactive le slider et retire son name pour qu'il ne soit pas envoyé
+                $('#specific_date_slider').prop('disabled', true).removeAttr('name');
+            }
+        });
+
+        // Intercepter la soumission du formulaire
+        $('#search-form').on('submit', function(e) {
+            e.preventDefault();
+            let formData = $(this).serialize();
+
+            $.ajax({
+                url: '{{ route("search.ajax") }}',
+                method: 'GET',
+                data: formData,
+                dataType: 'json',
+                success: function(articles) {
+                    let resultsDiv = $('#search-results');
+                    resultsDiv.empty();
+
+                    if (articles.length === 0) {
+                        resultsDiv.append('<p>Aucun résultat trouvé.</p>');
+                    } else {
+                        articles.forEach(function(article) {
+                            let link = $('<a href="#" class="article-link"></a>')
+                                .text(article.title_art)
+                                .data('id', article.id_art)
+                                .on('click', function(e) {
+                                    e.preventDefault();
+                                    loadArticle($(this).data('id'));
+                                });
+                            resultsDiv.append(link).append('<br>');
+                        });
+                    }
+                },
+                error: function(err) {
+                    console.error('Erreur AJAX', err);
+                }
+            });
+        });
+
+        // Fonction pour charger l'article sélectionné
+        // Fonction pour charger l'article sélectionné
+    function loadArticle(articleId) {
+        $.ajax({
+            url: '/article-info/' + articleId,
+            method: 'GET',
+            dataType: 'json',
+            success: function(article) {
+                let contentDiv = $('#article-content');
+                contentDiv.empty();
+
+                // -- Ici on construit le HTML qu'on veut afficher --
+                let html = '';
+
+                // Afficher l'image si elle est définie
+                if (article.image_art) {
+                    html += '<img src="/media/' + article.image_art + '" '
+                        + 'alt="Image de l\'article" '
+                        + 'class="img-fluid mb-3" style="max-width:500px;">';
+                }
+
+                // Titre de l'article
+                html += '<h2>' + article.title_art + '</h2>';
+
+                // Date (ex. 2023-12-15)
+                if (article.date_art) {
+                    html += '<p><strong>Date :</strong> ' + article.date_art + '</p>';
+                }
+
+                // Temps de lecture (readtime_art)
+                if (article.readtime_art) {
+                    html += '<p><strong>Temps de lecture :</strong> '
+                        + article.readtime_art + ' min</p>';
+                }
+
+                // Contenu de l'article
+                html += '<p>' + article.content_art + '</p>';
+
+                // Injecter le HTML dans la div
+                contentDiv.append(html);
+            },
+            error: function(err) {
+                console.error('Erreur lors du chargement de l\'article', err);
+            }
+        });
+    }
+
+    });
     </script>
 </body>
 </html>
