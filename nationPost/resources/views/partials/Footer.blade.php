@@ -1,6 +1,6 @@
 <!-- Footer -->
-<footer>
-    <div class="container">
+<footer class="bg-dark text-white mt-5">
+    <div class="container py-3">
         <div class="row">
             <!-- Column 1 -->
             <div class="col-md-4">

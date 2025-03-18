@@ -1,7 +1,6 @@
 <!-- Importation de la police Playfair Display -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-<body class="{{ session('theme', 'default') }} {{ session('font_size', 'default') }} {{ session('font_family', 'default') }}">
-</body>
+
 <nav class="navbar fixed-top bg-light">
     <div class="container-fluid">
         
@@ -28,8 +27,9 @@
                             <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('article.favorites') }}">Favorites</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('search') }}">Search</a></li>
-                           <!-- Lien vers le Dashboard uniquement pour les admins -->
-                           @auth
+                            <li class="nav-item"><a class="nav-link" href="{{ route('apropos') }}">À propos</a></li>
+                            <!-- Lien vers le Dashboard uniquement pour les admins -->
+                            @auth
                                 @if (Auth::user()->role === 'admin')
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
@@ -37,14 +37,6 @@
                                 @endif
                             @endauth
                             <hr>
-                            <!-- Affichage des catégories -->
-                            @foreach ($categories as $category)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('category.show', $category->id_cat) }}">
-                                        {{ $category->name_cat }}
-                                    </a>
-                                </li>
-                            @endforeach
                         </ul>
                     </div>
                 </div>
