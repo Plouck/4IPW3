@@ -14,56 +14,44 @@ Route::get('/', [ArticleController::class, 'index'])->name('home');
 // Route pour afficher un article spécifique
 Route::get('/article/{id}', [ArticleController::class, 'show'])->name('article.show');
 
-// Route pour soumettre un article
-Route::post('/article', [ArticleController::class, 'store'])->name('article.store');
-
-// Routes pour la connexion et l'inscription
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login'); // Formulaire de connexion
-Route::post('/login', [AuthController::class, 'login'])->name('login.post'); // Traitement du formulaire de connexion
-
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register'); // Formulaire d'inscription
-Route::post('/register', [AuthController::class, 'register'])->name('register.post'); // Traitement du formulaire d'inscription
-
-// Route de déconnexion (POST uniquement)
+// Routes pour l'authentification
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Routes pour l'inscription
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 
 // Routes pour les catégories
 Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category.show');
 
 // Routes de recherche
-Route::get('/recherche', [SearchController::class, 'showSearchPage'])->name('search'); 
-Route::post('/recherche', [SearchController::class, 'search'])->name('search'); 
+Route::get('/recherche', [SearchController::class, 'showSearchPage'])->name('search');
+Route::post('/recherche', [SearchController::class, 'search'])->name('search');
 Route::get('/recherche/resultats', [SearchController::class, 'searchResults'])->name('search.results');
-
-// Routes pour gérer les articles favoris
-Route::get('/favorites', [ArticleController::class, 'showFavorites'])->name('article.favorites');
-Route::post('/article/{id}/favorite', [ArticleController::class, 'addFavorite'])->name('article.addFavorite');
 
 // Route pour afficher les articles d'une date spécifique
 Route::get('/dates/{date_art}', [SearchController::class, 'articlesByDate'])->name('articlesByDate');
 
-// Route pour afficher les articles favoris
-Route::get('/favorites', [ArticleController::class, 'showFavorites'])->name('article.favorites');
-
-// Route pour ajouter un article aux favoris
-Route::post('/article/{id}/favorite', [ArticleController::class, 'addFavorite'])->name('article.addFavorite');
-
-// Route pour le tableau de bord
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// Routes pour les favoris (stockés en session)
+Route::get('/favorites', [ArticleController::class, 'showFavorites'])->name('favorites.show');
+Route::post('/favorites/add/{id}', [ArticleController::class, 'addToFavorites'])->name('favorites.add');
+Route::post('/favorites/remove/{id}', [ArticleController::class, 'removeFromFavorites'])->name('favorites.remove');
+Route::post('/favorites/clear', [ArticleController::class, 'clearFavorites'])->name('favorites.clear');
 
 // Route pour afficher les informations d'un article
 Route::get('/article-info/{id}', [ArticleController::class, 'getArticleInfo']);
 
-// Routes pour l'inscription avec RegisteredUserController
-Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-Route::post('/register', [RegisteredUserController::class, 'store']); 
-
+// Routes pour le tableau de bord (protégées par middleware)
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
-Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('auth');
-
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
+// Préférences utilisateur
 Route::post('/set-preferences', [AuthController::class, 'update'])->name('set.preferences');
+
+Route::get('/favorites/count', [ArticleController::class, 'favoriteCount'])->name('favorites.count');
+Route::post('/article/{id}/favorite', [ArticleController::class, 'addFavorite'])->name('article.addFavorite');
+
+Route::get('/favorites/list', [ArticleController::class, 'favoriteList'])->name('favorites.list');

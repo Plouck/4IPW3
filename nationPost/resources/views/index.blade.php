@@ -19,7 +19,14 @@
     <div class="row">
       @foreach($articles as $article)
         <div class="col-md-3">
-          <div class="article-card mb-4">
+          <div class="article-card mb-4" data-article-id="{{ $article->id_art }}" 
+            data-article-title="{{ $article->title_art }}" 
+            data-article-author="{{ $article->author_art ?? 'Auteur inconnu' }}" 
+            data-article-idimage="{{ $article->image_art }}" 
+            data-article-date="{{ date('d/m/Y', strtotime($article->date_art)) }}" 
+            data-article-read-time="{{ $article->readtime_art }} minutes" 
+            data-article-category="{{ $article->category->name_cat }}">
+            
             <img src="{{ asset('media/article/'.$article->image_art) }}" class="article-image" alt="{{ $article->title_art }}">
             <div class="card-body">
               <a href="{{ route('article.show', ['id' => $article->id_art]) }}" class="article-title">
@@ -29,7 +36,7 @@
                 <img src="./media/icone/commenter.png" alt="commenter"> 102 comments
               </div>
               <!-- Bouton Like -->
-              <form action="{{ route('article.addFavorite', ['id' => $article->id_art]) }}" method="POST">
+              <form action="{{ route('favorites.add', ['id' => $article->id_art]) }}" method="POST">
                 @csrf
                 <button type="submit" class="btn btn-outline-primary mt-3">
                   <i class="fa fa-heart"></i> Like
@@ -58,13 +65,34 @@
       // Lors du survol d'une carte d'article
       $('.article-card').hover(
         function() {
-          // Récupérer les informations de l'article (titre et extrait)
-          var articleTitle = $(this).find('.article-title').text();
-          var articleExcerpt = $(this).find('.article-body').text().substr(0, 100) + '...'; // Extrait de 100 caractères
+          // Récupérer les informations de l'article (titre, date, auteur, etc.)
+          var articleTitle = $(this).data('article-title');
+          var articleAuthor = $(this).data('article-author');
+          var articleDate = $(this).data('article-date');
+          var articleReadTime = $(this).data('article-read-time');
+          var articleCategory = $(this).data('article-category');
+
+          // Créer un extrait avec ces données pour l'utilisateur
+          var hoverInfo = "";
+
+          @auth
+            // Si l'utilisateur est authentifié, afficher la date de création, durée de lecture et catégorie
+            hoverInfo += "<strong>Date de création:</strong> " + articleDate + "<br>" +
+                         "<strong>Durée de lecture:</strong> " + articleReadTime + "<br>" +
+                         "<strong>Catégorie:</strong> " + articleCategory + "<br>";
+            
+            // Si l'utilisateur est un admin, ajouter plus d'informations
+            @if(Auth::user()->role === 'admin')
+              hoverInfo += "<strong>Titre:</strong> " + articleTitle + "<br>" +
+                           "<strong>Auteur:</strong> " + articleAuthor + "<br>" +
+                           "<strong>ID:</strong> " + $(this).data('article-id') + "<br>" +
+                           "<strong>ID de l'image:</strong> " + $(this).data('article-idimage');
+            @endif
+          @endauth
 
           // Afficher les informations dans le panneau
-          $('#article-title').text(articleTitle);
-          $('#article-excerpt').text(articleExcerpt);
+          $('#article-title').html(articleTitle);
+          $('#article-excerpt').html(hoverInfo);
           
           // Afficher le panneau
           $('#article-hover-info').fadeIn(300);

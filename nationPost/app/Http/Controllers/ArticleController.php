@@ -4,23 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Article;
-use App\Models\Category;  // Assure-toi d'importer le modèle Category
+use App\Models\Category;
 
 class ArticleController extends Controller
 {
     // Afficher la liste des articles (page d'accueil)
     public function index()
     {
-        // Récupérer les 10 premiers articles publiés le 15 décembre 2023
         $articles = Article::where('date_art', '2023-12-15')
-            ->orderBy('id_art', 'desc')  // Tri par id_art
+            ->orderBy('id_art', 'desc')
             ->take(10)
             ->get();
 
-        // Récupérer toutes les catégories
         $categories = Category::all();
 
-        return view('index', compact('articles', 'categories')); // Passe les articles et les catégories à la vue index.blade.php
+        return view('index', compact('articles', 'categories'));
     }
 
     // Afficher un article spécifique
@@ -30,59 +28,79 @@ class ArticleController extends Controller
         return view('article', compact('article'));
     }
 
-    // Ajouter un article aux favoris (cookie)
-    public function addToFavorites($id)
+    public function addToFavorites(Request $request, $id)
     {
-        $favorites = isset($_COOKIE['favorites']) ? json_decode($_COOKIE['favorites'], true) : [];
+        $favorites = $request->session()->get('favorites', []);
 
         if (!in_array($id, $favorites)) {
             $favorites[] = $id;
-            setcookie('favorites', json_encode($favorites), time() + (86400 * 30), "/");
+            $request->session()->put('favorites', $favorites);
         }
 
-        return redirect()->route('index')->with('message', 'Article ajouté aux favoris!');
+        return redirect()->back()->with('message', 'Article ajouté aux favoris!');
     }
 
-    // Afficher les articles favoris
-    public function showFavorites()
+    // Retirer un article des favoris (session)
+    public function removeFromFavorites(Request $request, $id)
     {
-        // Récupérer les articles favoris depuis les cookies
-        $favorites = isset($_COOKIE['favorites']) ? json_decode($_COOKIE['favorites'], true) : [];
-        $favoriteArticles = Article::whereIn('id_art', $favorites)->get();
+        $favorites = $request->session()->get('favorites', []);
 
-        // Récupérer toutes les catégories
+        if (($key = array_search($id, $favorites)) !== false) {
+            unset($favorites[$key]);
+            $request->session()->put('favorites', array_values($favorites));
+        }
+
+        return redirect()->back()->with('message', 'Article retiré des favoris.');
+    }
+
+    // Effacer tous les favoris (session)
+    public function clearFavorites(Request $request)
+    {
+        $request->session()->forget('favorites');
+        return response()->json(['success' => true]);
+    }
+
+    // Afficher les articles favoris (session)
+    public function showFavorites(Request $request)
+    {
+        $favorites = $request->session()->get('favorites', []);
+        $favoriteArticles = Article::whereIn('id_art', $favorites)->get();
         $categories = Category::all();
 
-        // Passer les articles favoris et les catégories à la vue favorites
         return view('favorites', compact('favoriteArticles', 'categories'));
-    }
-
-    // Ajouter un article aux favoris
-    public function addFavorite($id)
-    {
-        // Récupérer l'article par ID
-        $article = Article::findOrFail($id);
-
-        // Vérifier si le cookie existe déjà, sinon le créer
-        $favorites = isset($_COOKIE['favorites']) ? json_decode($_COOKIE['favorites'], true) : [];
-
-        // Ajouter l'article aux favoris s'il n'y est pas déjà
-        if (!in_array($article->id_art, $favorites)) {
-            $favorites[] = $article->id_art;  // Ajouter l'ID de l'article aux favoris
-        }
-
-        // Enregistrer les favoris dans le cookie
-        setcookie('favorites', json_encode($favorites), time() + (86400 * 30), '/'); // Cookie valable pendant 30 jours
-
-        // Rediriger vers la page précédente ou afficher un message
-        return redirect()->back()->with('success', 'Article ajouté aux favoris !');
     }
 
     // Récupérer les informations supplémentaires sur un article pour AJAX
     public function getArticleInfo($id)
-        {
-            $article = Article::findOrFail($id);
-            return response()->json($article); // Retourne les données de l'article au format JSON
-        }
+    {
+        $article = Article::findOrFail($id);
+        return response()->json($article);
+    }
+
+    // Compte le nombre d'articles favoris
+    public function favoriteCount(Request $request)
+    {
+        $favorites = $request->session()->get('favorites', []); // Récupérer les favoris depuis la session
+        return response()->json(['count' => count($favorites)]);
+    }
+
+    public function favoriteList(Request $request)
+    {
+        $page = $request->input('page', 1);  // Récupère la page (par défaut la page 1)
+        $size = $request->input('size', 5);   // Récupère la taille de la page (par défaut 5 articles par page)
+
+        $favorites = $request->session()->get('favorites', []);
+        $totalFavorites = count($favorites);  // Total des favoris
+
+        $favoriteArticles = Article::whereIn('id_art', $favorites)
+                                ->skip(($page - 1) * $size)
+                                ->take($size)
+                                ->get(['id_art', 'title_art', 'image_art']);
+
+        return response()->json([
+            'total' => $totalFavorites,  // Nombre total de favoris
+            'favorites' => $favoriteArticles
+        ]);
+    }
 
 }

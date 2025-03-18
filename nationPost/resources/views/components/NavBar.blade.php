@@ -1,43 +1,39 @@
 <!-- Importation de la police Playfair Display -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
 <body class="{{ session('theme', 'default') }} {{ session('font_size', 'default') }} {{ session('font_family', 'default') }}">
-</body>
+
 <nav class="navbar fixed-top bg-light">
-    <div class="container-fluid">
+    <div class="container-fluid d-flex flex-column">
         
-        <!-- Bloc pour afficher le titre du site -->
-        <div class="col-12 text-center py-3" style="background-color: #6a0dad;">
-            <h1 class="fw-bold m-0" style="font-size: 2.5rem; font-family: 'Playfair Display', serif; color: white;">
-                NationalPost
-            </h1>
+        <!-- Bloc pour afficher le titre du site, bien centré -->
+        <div class="w-100 text-center py-3 bg-purple">
+            <h1 class="fw-bold m-0 site-title">NationalPost</h1>
         </div>
 
-        <div class="row w-100 align-items-center">
-
+        <!-- Deuxième ligne avec menu, préférences et connexion -->
+        <div class="row w-100 align-items-center py-2">
+            
             <!-- Menu Offcanvas -->
             <div class="col-4">
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
                     <span class="navbar-toggler-icon"></span> Menu
                 </button>
-                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas offcanvas-start" id="offcanvasNavbar">
                     <div class="offcanvas-header">
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
                     </div>
                     <div class="offcanvas-body">
                         <ul class="navbar-nav">
                             <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('article.favorites') }}">Favorites</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('favorites.show') }}">Favorites <span id="favoritesCount"></span></a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('search') }}">Search</a></li>
-                           <!-- Lien vers le Dashboard uniquement pour les admins -->
-                           @auth
+                            @auth
                                 @if (Auth::user()->role === 'admin')
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
-                                    </li>
+                                    <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
                                 @endif
                             @endauth
                             <hr>
-                            <!-- Affichage des catégories -->
                             @foreach ($categories as $category)
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('category.show', $category->id_cat) }}">
@@ -51,10 +47,11 @@
             </div>
 
             <!-- Options de présentation -->
-            <div class="col-4 text-end">
+            <div class="col-4 text-center">
                 <form method="POST" action="{{ route('set.preferences') }}" class="d-inline-block">
                     @csrf
-                    <select name="theme" onchange="this.form.submit()" class="form-select">
+                    <!-- Sélecteur de thème -->
+                    <select name="theme" onchange="this.form.submit()" class="form-select d-inline-block w-auto">
                         <option value="default" {{ session('theme', 'default') === 'default' ? 'selected' : '' }}>Default</option>
                         <option value="light" {{ session('theme') === 'light' ? 'selected' : '' }}>Light</option>
                         <option value="dark" {{ session('theme') === 'dark' ? 'selected' : '' }}>Dark</option>
@@ -64,14 +61,16 @@
                         <option value="blue" {{ session('theme') === 'blue' ? 'selected' : '' }}>Blue</option>
                     </select>
 
-                    <select name="font_size" onchange="this.form.submit()" class="form-select">
+                    <!-- Sélecteur de taille de police -->
+                    <select name="font_size" onchange="this.form.submit()" class="form-select d-inline-block w-auto mx-2">
                         <option value="default" {{ session('font_size', 'default') === 'default' ? 'selected' : '' }}>Default</option>
                         <option value="small" {{ session('font_size') === 'small' ? 'selected' : '' }}>Small</option>
                         <option value="medium" {{ session('font_size') === 'medium' ? 'selected' : '' }}>Medium</option>
                         <option value="large" {{ session('font_size') === 'large' ? 'selected' : '' }}>Large</option>
                     </select>
 
-                    <select name="font_family" onchange="this.form.submit()" class="form-select">
+                    <!-- Sélecteur de famille de police -->
+                    <select name="font_family" onchange="this.form.submit()" class="form-select d-inline-block w-auto">
                         <option value="default" {{ session('font_family', 'default') === 'default' ? 'selected' : '' }}>Default</option>
                         <option value="arial" {{ session('font_family') === 'arial' ? 'selected' : '' }}>Arial</option>
                         <option value="times" {{ session('font_family') === 'times' ? 'selected' : '' }}>Times New Roman</option>
@@ -167,5 +166,18 @@
             console.error('Error:', error);
             alert('Une erreur est survenue lors de la déconnexion.');
         });
+    });
+
+    function updateFavoritesCount() {
+        fetch("{{ route('favorites.count') }}")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('favoritesCount').textContent = data.count;
+            })
+            .catch(error => console.error('Erreur lors de la récupération du nombre de favoris:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateFavoritesCount();
     });
 </script>

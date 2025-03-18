@@ -1,6 +1,6 @@
 body {
     background-color: #f8f9fa;
-    padding-top: 60px; /* Ajuste cette valeur selon la hauteur de la navbar */
+    padding-top: 90px; /* Ajuste cette valeur selon la hauteur de la navbar */
     font-family: 'Verdana', sans-serif;
   }
   
@@ -12,6 +12,8 @@ body {
     right: 0;
     width: 100%;
     z-index: 1000; /* Assure-toi que la navbar est au-dessus du contenu */
+    height: 60px; /* Ajuste cette hauteur si besoin */
+  line-height: 60px; /* Centre le texte verticalement */
   }
   
   nav .navbar-brand,
@@ -179,3 +181,43 @@ body.large { font-size: 18px; }
 body.arial { font-family: Arial, sans-serif; }
 body.times { font-family: 'Times New Roman', Times, serif; }
 body.courier { font-family: 'Courier New', Courier, monospace; }
+
+/* Style des cartes d'articles favoris */
+.favorite-item {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.favorite-item.removing {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+/* Bouton "Retirer tous les favoris" */
+#clearFavorites {
+  background-color: #dc3545;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#clearFavorites:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
+.bg-purple {
+  background-color: #6a0dad;
+}
+
+.site-title {
+  font-size: 2.5rem;
+  font-family: 'Playfair Display', serif;
+  color: white;
+}
+
+/* Ajuste la largeur des éléments de sélection */
+.form-select {
+  width: auto;
+}
