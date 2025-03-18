@@ -84,5 +84,5 @@ class ArticleController extends Controller
             $article = Article::findOrFail($id);
             return response()->json($article); // Retourne les données de l'article au format JSON
         }
-
+        
 }
