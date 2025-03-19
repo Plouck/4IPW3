@@ -35,7 +35,7 @@
         <li>options de présentation </li>
         <li>options de recherche</li>
         <li>API </li>
-        <li>Ajout d'une bannière publicitaire </li>
+        <li>Ajout d'une bannière publicitaire.</li>
         <li>Gestion asynchrone des favoris : </li>
         <ul>
             <li> L’utilisateur peut ajouter un article à ses favoris. </li>
