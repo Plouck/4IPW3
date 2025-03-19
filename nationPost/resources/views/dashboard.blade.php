@@ -13,13 +13,13 @@
 
 <body>
   <!--NavBar-->
-  @include('components.NavBar')
+  @include('partials.NavBar')
     <br>
     <br><br><br><br><br><br><br><br>
     <h1>Bienvenue dans le Dashboard</h1>
 
   <!--Footer-->
-  @include('components.Footer')
+  @include('partials.Footer')
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   

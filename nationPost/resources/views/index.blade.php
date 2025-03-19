@@ -43,9 +43,17 @@
               <!-- Bouton Like -->
               <form action="{{ route('favorites.add', ['id' => $article->id_art]) }}" method="POST">
                 @csrf
-                <button type="submit" class="btn btn-outline-primary mt-3">
-                  <i class="fa fa-heart"></i> Like
+                
+                @php
+                  $favorites = session('favorites', []);
+                  $isLiked = in_array($article->id_art, $favorites);
+                @endphp
+
+                <button type="button" class="btn {{ $isLiked ? 'btn-primary' : 'btn-outline-primary' }} mt-3 like-btn" 
+                        data-article-id="{{ $article->id_art }}">
+                    <i class="fa fa-heart"></i> {{ $isLiked ? 'Dislike' : 'Like' }}
                 </button>
+
               </form>
             </div>
           </div>
@@ -112,6 +120,35 @@
         }
       );
     });
+    $(document).ready(function () {
+      $('.like-btn').click(function () {
+          var button = $(this);
+          var articleId = button.data('article-id');
+
+          $.ajax({
+              url: '/favorites/toggle/' + articleId,
+              type: 'POST',
+              headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+              success: function (response) {
+                  if (response.success) {
+                      if (response.liked) {
+                          button.addClass('btn-primary').removeClass('btn-outline-primary');
+                          button.html('<i class="fa fa-heart"></i> Dislike');
+                      } else {
+                          button.removeClass('btn-primary').addClass('btn-outline-primary');
+                          button.html('<i class="fa fa-heart"></i> Like');
+                      }
+
+                      // Mettre à jour le compteur des favoris (si tu en as un)
+                      $('#favorite-count').text(response.count);
+                  }
+              },
+              error: function () {
+                  alert('Erreur lors du traitement du like/dislike');
+              }
+          });
+      });
+  });
   </script>
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

@@ -1,14 +1,21 @@
 <!-- Footer -->
-<footer class="bg-dark text-white mt-5">
+<footer class="mt-5">
     <div class="container py-3">
         <div class="row">
             <!-- Column 1 -->
             <div class="col-md-4">
                 <h5>Liens rapides</h5>
                 <ul class="list-unstyled">
-                    <li><a href="./index.html" class="text-white">Accueil</a></li>
-                    <li><a href="./article.html" class="text-white">Article</a></li>
-                    <li><a href="./recherche.html" class="text-white">Recherche</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('favorites.show') }}">Favorites <span id="favoritesCount"></span></a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('search') }}">Search</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('apropos') }}">À propos</a></li>
+                            <!-- Lien vers le Dashboard uniquement pour les admins -->
+                            @auth
+                                @if (Auth::user()->role === 'admin')
+                                    <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
+                                @endif
+                            @endauth
                 </ul>
             </div>
             <!-- Column 2 -->

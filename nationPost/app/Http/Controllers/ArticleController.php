@@ -103,4 +103,28 @@ class ArticleController extends Controller
         ]);
     }
 
+    public function toggleFavorite(Request $request, $id)
+    {
+        $favorites = $request->session()->get('favorites', []);
+
+        if (in_array($id, $favorites)) {
+            // Si l'article est déjà en favori, on le retire (dislike)
+            $favorites = array_diff($favorites, [$id]);
+            $liked = false;
+        } else {
+            // Sinon, on l'ajoute (like)
+            $favorites[] = $id;
+            $liked = true;
+        }
+
+        // Sauvegarder les favoris mis à jour en session
+        $request->session()->put('favorites', $favorites);
+
+        return response()->json([
+            'success' => true,
+            'liked' => $liked,
+            'count' => count($favorites) // Met à jour le compteur des favoris
+        ]);
+    }
+
 }

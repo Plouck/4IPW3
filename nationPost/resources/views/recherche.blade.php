@@ -7,7 +7,7 @@
 
     <!-- Lien Bootstrap CSS, jQuery, etc. si besoin -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">
     <style>
         /* Pour que le contenu ne soit pas masqué par la navbar fixed-top, on ajoute un padding-top sur le body */
         body {
@@ -37,7 +37,7 @@
         }
     </style>
 </head>
-<body class="{{ session('theme', 'default') }} {{ session('font_size', 'default') }} {{ session('font_family', 'default') }}">
+<body>
 
     <!-- Insertion de la navbar -->
     @include('partials.navbar')

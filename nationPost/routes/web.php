@@ -26,7 +26,6 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.po
 // Routes pour les catégories
 Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category.show');
 
-
 // ========= Routes de recherche en mode SPA =========
 
 // Affichage de la page de recherche (formulaire + zones dynamiques)
@@ -67,22 +66,12 @@ Route::get('/favorites/count', [ArticleController::class, 'favoriteCount'])->nam
 Route::post('/article/{id}/favorite', [ArticleController::class, 'addFavorite'])->name('article.addFavorite');
 
 Route::get('/favorites/list', [ArticleController::class, 'favoriteList'])->name('favorites.list');
-// Routes pour le tableau de bord
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
-Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('auth');
-
-// Route pour mettre à jour les préférences
-Route::post('/set-preferences', [AuthController::class, 'update'])->name('set.preferences');
-
 
 // ========= Routes pour l'inscription avec RegisteredUserController =========
 Route::get('/register-alt', [RegisteredUserController::class, 'create'])->name('register.alt');
 // La route GET ci-dessus affiche un autre formulaire d'inscription (alternatif).
-// Tu peux renommer l'URL en /register si tu préfères unifier.
 
 // La route POST ci-dessous appelle la méthode store() du RegisteredUserController
 Route::post('/register-alt', [RegisteredUserController::class, 'store'])->name('register.store');
+
+Route::post('/favorites/toggle/{id}', [ArticleController::class, 'toggleFavorite'])->name('favorites.toggle');

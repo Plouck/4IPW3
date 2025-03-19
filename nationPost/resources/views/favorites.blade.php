@@ -12,7 +12,7 @@
 
 <body>
   <!--NavBar-->
-  @include('components.NavBar')
+  @include('partials.NavBar')
 
   <section class="container">
     <div class="d-flex justify-content-between align-items-center my-4">
@@ -35,7 +35,7 @@
   </section>
 
   <!--Footer-->
-  @include('components.Footer')
+  @include('partials.Footer')
 
   <!-- Modale de confirmation -->
   <div class="modal fade" id="confirmClearModal" tabindex="-1" aria-labelledby="confirmClearModalLabel" aria-hidden="true">

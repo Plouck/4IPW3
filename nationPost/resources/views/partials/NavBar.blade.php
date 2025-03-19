@@ -26,7 +26,7 @@
                     <div class="offcanvas-body">
                         <ul class="navbar-nav">
                             <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('favorites.show') }}">Favorites <span id="favoritesCount"></span></a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('favorites.show') }}">Favorites <span id="favorite-count">{{ count(session('favorites', [])) }}</span></a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('search') }}">Search</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('apropos') }}">À propos</a></li>
                             <!-- Lien vers le Dashboard uniquement pour les admins -->
@@ -35,7 +35,6 @@
                                     <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
                                 @endif
                             @endauth
-                            <hr>
                         </ul>
                     </div>
                 </div>
