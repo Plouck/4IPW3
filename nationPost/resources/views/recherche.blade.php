@@ -1,15 +1,13 @@
-<!-- Exemple de recherche.blade.php -->
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Recherche d’articles (SPA)</title>
+    <title>Recherche d’articles</title>
 
     <!-- Lien Bootstrap CSS, jQuery, etc. si besoin -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        /* Pour que le contenu ne soit pas masqué par la navbar fixed-top, on ajoute un padding-top sur le body */
         body {
             padding-top: 200px; 
         }
@@ -100,7 +98,7 @@
             <div class="spa-box">
                 <h2>Résultats</h2>
                 <div id="search-results">
-                    <!-- Les résultats de la recherche seront injectés ici -->
+                    
                 </div>
             </div>
         </div>
@@ -195,7 +193,7 @@
                 let contentDiv = $('#article-content');
                 contentDiv.empty();
 
-                // -- Ici on construit le HTML qu'on veut afficher --
+                // on construit le HTML qu'on veut afficher 
                 let html = '';
 
                 // Afficher l'image si elle est définie
@@ -208,7 +206,7 @@
                 // Titre de l'article
                 html += '<h2>' + article.title_art + '</h2>';
 
-                // Date (ex. 2023-12-15)
+                // Date
                 if (article.date_art) {
                     html += '<p><strong>Date :</strong> ' + article.date_art + '</p>';
                 }
