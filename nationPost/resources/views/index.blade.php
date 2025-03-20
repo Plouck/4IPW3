@@ -66,7 +66,6 @@
   <div id="article-hover-info">
     <h5 id="article-title"></h5>
     <p id="article-excerpt"></p>
-    <button class="btn btn-outline-light">Lire l'article</button>
   </div>
 
   <!--Footer-->
