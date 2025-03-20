@@ -75,3 +75,9 @@ Route::get('/register-alt', [RegisteredUserController::class, 'create'])->name('
 Route::post('/register-alt', [RegisteredUserController::class, 'store'])->name('register.store');
 
 Route::post('/favorites/toggle/{id}', [ArticleController::class, 'toggleFavorite'])->name('favorites.toggle');
+
+Route::get('/banner', [ArticleController::class, 'getBanner']);
+
+Route::get('/favorites/count', function () {
+    return response()->json(['count' => count(session('favorites', []))]);
+})->name('favorites.count');

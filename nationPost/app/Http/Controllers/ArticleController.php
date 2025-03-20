@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use App\Models\Category;
+use GuzzleHttp\Client;
 
 class ArticleController extends Controller
 {
@@ -126,5 +127,21 @@ class ArticleController extends Controller
             'count' => count($favorites) // Met à jour le compteur des favoris
         ]);
     }
+    public function getBanner()
+    {
+        // Créer une instance de Guzzle
+        $client = new Client();
+
+        try {
+            // Faire la requête GET à l'URL de la bannière
+            $response = $client->get('http://playground.burotix.be/adv/banner_for_isfce.json');
+            $data = json_decode($response->getBody()->getContents(), true);
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Unable to fetch banner data'], 500);
+        }
+    }
+
 
 }
